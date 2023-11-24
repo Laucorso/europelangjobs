@@ -6,13 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\Dog;
 use App\Models\Breed;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class DogController extends Controller
 {
     //
-    public function index(){
-        $dogs = Dog::paginate(2);
+    public function index(Request $request){
+        Log::info($request);
         $breeds = Breed::select('name','id')->get();
+        if($request->breed == null){
+            $dogs = Dog::paginate(2);
+        }else{
+            $dogs = Dog::where('breed_id', $request->breed)->paginate(1);
+        }
         return response()->json([
             'dogs'=>$dogs,
             'breeds'=>$breeds,

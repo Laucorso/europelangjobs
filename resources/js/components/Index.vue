@@ -5,22 +5,30 @@
             <p class="font-semibold text-xl mb-4">Consulta los perros :)</p>
 
             <div class="flex gap-4 items-center mb-4">
+                <span class="material-symbols-outlined">
+                    sound_detection_dog_barking
+                </span>
                 <label for="breed">Buscar por raza:</label>
-                <select v-model="selected_breed" id="breed">
+                <select v-model="selected_breed" @change="filterDogs" id="breed" class="appearance-none border border-gray-300 rounded-md py-2 pl-3 pr-10">
                     <option v-for="breed in breeds" :key="breed.id" :value="breed.id">{{ breed.name }}</option>
                 </select>
-
+                <span class="material-symbols-outlined">
+                    palette
+                </span>
                 <label for="color">Buscar por color:</label>
-                <select v-model="selected_color" id="color">
+                <select v-model="selected_color" @change="filterDogs" id="color" class="appearance-none border border-gray-300 rounded-md py-2 pl-3 pr-10">
                     <option v-for="(colorName, colorId) in colors" :key="colorId" :value="colorId">
                         {{ colorName }}
                     </option>                
                 </select>
-
+                <span class="material-symbols-outlined">
+                    aspect_ratio
+                </span>
                 <label for="size">Buscar por tamaño</label>
-                <select v-model="selected_size" id="size">
+                <select v-model="selected_size" @change="filterDogs" id="size" class="appearance-none border border-gray-300 rounded-md py-2 pl-3 pr-10">
                     <option v-for="(sizeName, sizeId) in sizes" :key="sizeId" :value="sizeId">
                         {{ sizeName }}
+                        
                     </option>                   
                 </select>
             </div>
@@ -43,6 +51,10 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div v-if="create">
+                <CreateDogsForm />
+            </div>
         </div>
 
         <!-- <div class="mt-4">
@@ -76,21 +88,39 @@
         sizes: [],
         paginationInfo:[],
         selected_breed:null,
-        selected_breed: null,
         selected_color: null,
         selected_size: null,
+        create: false,
       };
     },
     mounted() {
-        this.fetchDogs();
         this.loadDogDetails();
+        this.fetchDogs();
     },
     methods: {
-
+        async filterDogs() {
+            if (this.selected_breed === null && this.selected_color === null & this.selected_size === null) {
+                this.fetchDogs();
+            } else {
+                var url = `/api/list?page=1`; //inicializamos paginación
+                if(this.selected_breed) url = url+'&breed='+this.selected_breed;
+                if(this.selected_color) url = url+'&color='+this.selected_color;
+                if(this.selected_size) url = url+'&size='+this.selected_size;
+                axios.get(url)
+                    .then(response=>{
+                        this.dogs = response.data.dogs.data
+                    })
+                    .catch(error=>{
+                        console.error(error);
+                    })
+            }        
+        },
         async fetchDogs(page = 1) {
-            axios.get(`/api/list?page=${page}`)
+            const url = `/api/list?page=${page}`;
+            axios.get(url)
                 .then(response => {
                     this.dogs = response.data.dogs.data
+                    console.log(this.dogs)
                     this.paginationInfo = response.data.dogs;
                     this.breeds = response.data.breeds
                 })
@@ -107,6 +137,7 @@
                 console.error('Error al cargar colores:', error);
             }
         },
+
         getBreedName(breedId) {
             const breed = this.breeds.find(b => b.id === breedId);
             return breed ? breed.name : 'Desconocido';

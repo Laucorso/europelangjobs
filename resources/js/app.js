@@ -15,9 +15,12 @@ import { TailwindPagination } from 'laravel-vue-pagination';
 
 // Registra el componente globalmente
 import Index from "./components/Index.vue"
+import CreateDogsForm from "./components/CreateDogsForm.vue"
+
 const app = createApp({
     components:{
         Index,
+        CreateDogsForm,
     },
 });
 
