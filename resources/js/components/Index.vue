@@ -9,15 +9,17 @@
                     sound_detection_dog_barking
                 </span>
                 <label for="breed">Buscar por raza:</label>
-                <select v-model="selected_breed" @change="filterDogs" id="breed" class="appearance-none border border-gray-300 rounded-md py-2 pl-3 pr-10">
+                <select v-model="selected_breed" id="breed" class="appearance-none border border-gray-300 rounded-md py-2 pl-3 pr-10">
+                    <option :value="null"></option> 
                     <option v-for="breed in breeds" :key="breed.id" :value="breed.id">{{ breed.name }}</option>
                 </select>
                 <span class="material-symbols-outlined">
                     palette
                 </span>
                 <label for="color">Buscar por color:</label>
-                <select v-model="selected_color" @change="filterDogs" id="color" class="appearance-none border border-gray-300 rounded-md py-2 pl-3 pr-10">
-                    <option v-for="(colorName, colorId) in colors" :key="colorId" :value="colorId">
+                <select v-model="selected_color" id="color" class="appearance-none border border-gray-300 rounded-md py-2 pl-3 pr-10">
+                    <option :value="null"></option> 
+                    <option v-for="(colorName, colorId) in colors" :key="colorId" :value="colorName">
                         {{ colorName }}
                     </option>                
                 </select>
@@ -25,12 +27,17 @@
                     aspect_ratio
                 </span>
                 <label for="size">Buscar por tamaño</label>
-                <select v-model="selected_size" @change="filterDogs" id="size" class="appearance-none border border-gray-300 rounded-md py-2 pl-3 pr-10">
-                    <option v-for="(sizeName, sizeId) in sizes" :key="sizeId" :value="sizeId">
+                <select v-model="selected_size" id="size" class="appearance-none border border-gray-300 rounded-md py-2 pl-3 pr-10">
+                    <option :value="null"></option> 
+                    <option v-for="(sizeName, sizeId) in sizes" :key="sizeId" :value="sizeName">
                         {{ sizeName }}
-                        
                     </option>                   
                 </select>
+                <button @click="refreshFilters" class="mt-2">
+                    <span class="material-symbols-outlined">
+                    refresh
+                    </span>
+                </button>
             </div>
 
             <table class="w-full text-black">
@@ -91,7 +98,19 @@
         selected_color: null,
         selected_size: null,
         create: false,
+        originalDogs: [],
       };
+    },
+    watch: {
+        selected_breed() {
+            this.filterDogs(); 
+        },
+        selected_size() {
+            this.filterDogs(); 
+        },
+        selected_color() {
+            this.filterDogs(); 
+        },
     },
     mounted() {
         this.loadDogDetails();
@@ -99,30 +118,34 @@
     },
     methods: {
         async filterDogs() {
-            if (this.selected_breed === null && this.selected_color === null & this.selected_size === null) {
-                this.fetchDogs();
+            if (this.selected_breed === null && this.selected_color === null && this.selected_size === null) {
+                console.log('hola');
+                this.dogs = this.originalDogs;
             } else {
-                var url = `/api/list?page=1`; //inicializamos paginación
-                if(this.selected_breed) url = url+'&breed='+this.selected_breed;
-                if(this.selected_color) url = url+'&color='+this.selected_color;
-                if(this.selected_size) url = url+'&size='+this.selected_size;
-                axios.get(url)
-                    .then(response=>{
-                        this.dogs = response.data.dogs.data
-                    })
-                    .catch(error=>{
-                        console.error(error);
-                    })
-            }        
+                // Filtrado en memoria
+                this.dogs = this.originalDogs.filter(dog => {
+                    console.log(this.selected_color);
+                    const filterByBreed = this.selected_breed === null || dog.breed_id === this.selected_breed;
+                    const filterByColor = this.selected_color === null || dog.hair_color === this.selected_color;
+                    const filterBySize = this.selected_size === null || (this.selected_size !== 'null' && dog.size === this.selected_size);
+
+                    return filterByBreed && filterByColor && filterBySize;
+                });
+            }
         },
         async fetchDogs(page = 1) {
             const url = `/api/list?page=${page}`;
             axios.get(url)
                 .then(response => {
-                    this.dogs = response.data.dogs.data
-                    console.log(this.dogs)
+                    // this.dogs = response.data.dogs.data
+                    // console.log(this.dogs)
+                    // this.paginationInfo = response.data.dogs;
+                    // this.breeds = response.data.breeds
+
+                    this.originalDogs = response.data.dogs.data;
+                    this.dogs = this.originalDogs.slice(); // Inicializar con la lista completa
                     this.paginationInfo = response.data.dogs;
-                    this.breeds = response.data.breeds
+                    this.breeds = response.data.breeds;
                 })
                 .catch(error => {
                     console.error(error);
@@ -137,15 +160,20 @@
                 console.error('Error al cargar colores:', error);
             }
         },
-
+        refreshFilters(){
+            this.selected_breed = null;
+            this.selected_size = null;
+            this.selected_colors = null;
+            this.dogs = this.originalDogs.slice();
+        },
         getBreedName(breedId) {
             const breed = this.breeds.find(b => b.id === breedId);
             return breed ? breed.name : 'Desconocido';
         },
         fetchPrevPage() {
-        if (this.paginationInfo.prev_page_url) {
-            this.fetchDogs(this.paginationInfo.prev_page_url);
-        }
+            if (this.paginationInfo.prev_page_url) {
+                this.fetchDogs(this.paginationInfo.prev_page_url);
+            }
         },
         extractPageNumber(url) {
             console.log(url)
@@ -154,11 +182,12 @@
             return pageNumber
         },
         fetchNextPage() {
-        if (this.paginationInfo.next_page_url) {
-            const pageNumber = this.extractPageNumber(this.paginationInfo.next_page_url);
-            this.fetchDogs(pageNumber);
-        }
+            if (this.paginationInfo.next_page_url) {
+                const pageNumber = this.extractPageNumber(this.paginationInfo.next_page_url);
+                this.fetchDogs(pageNumber);
+            }
         },
+
     
     }
   }
