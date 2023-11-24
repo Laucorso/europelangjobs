@@ -1,5 +1,5 @@
 <template>
-  <!-- <button @click="cancelCreate" class="w-1/2 mt-4 bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-900 focus:outline-none focus:ring focus:border-blue-300">Volver</button> -->
+  <button @click="cancelCreate" class="w-1/2 mt-4 bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-900 focus:outline-none focus:ring focus:border-blue-300">Volver</button>
 
   <div class="flex justify-center items-center bg-blue-200 p-8 rounded-lg shadow-md mt-8">
       <form @submit.prevent="handleSubmit" class="flex flex-col gap-4">
@@ -15,11 +15,10 @@
 
         <label for="hair" class="text-lg font-semibold">Seleccionar color pelo:</label>
         <div class="color-options">
-          <div @click="selectColor(color)" class="flex items-center gap-4 rounded w-10 cursor-pointer" v-for="color in colors" :key="color" :class="{ 'bg-yellow-700': color === 'Brown', 'bg-black': color === 'Black', 'bg-gray-100': color === 'Blanco'}">
+          <div @click="selectColor(color)" class="flex items-center gap-4 rounded w-10 cursor-pointer" v-for="color in colors" :key="color" :class="{ 'bg-yellow-700': color === 'Brown', 'bg-black': color === 'Black', 'bg-gray-100': color === 'Blanco', 'bg-gray-500': color === 'Gray', 'border-2 border-black': color == this.dog.color_hair}">
             &nbsp;
           </div>
         </div>
-
 
         <label class="text-lg font-semibold">Tamaño del perro:</label>
         <div class="flex gap-2">
@@ -81,10 +80,8 @@
     handleFileChange(event) {
         this.dog.photo = event.target.files[0];
     },
-    emits: ['cancel'],
 
     cancelCreate() {
-      console.log('si');
       this.$emit('cancel', true);
     },
     handleSubmit() {

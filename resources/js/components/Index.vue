@@ -55,7 +55,11 @@
                 </thead>
                 <tbody>
                     <tr v-for="dog in dogs" :key="dog.id" height="120">
-                        <td class="border-2 py-2 px-4 text-center"><img :src="'/storage/' + dog.photo" alt="Foto del perro"></td>
+                        <td class="border-2 py-2 px-4 text-center">
+                            <div class="flex items-center justify-center">
+                                <img :src="'/storage/' + dog.photo" alt="Foto del perro" width="120">
+                            </div>                        
+                        </td>
                         <td class="border-2 py-2 px-4 text-center"><strong>{{ getBreedName(dog.breed_id) }}</strong></td>
                         <td class="border-2 py-2 px-4 text-center">{{ dog.size }}</td>
                         <td class=" border-2 py-2 px-4 text-center">{{ dog.hair_color }}</td>
@@ -74,14 +78,8 @@
             </div>
         </div>
         <div v-if="create">
-            <create-dogs-form :breeds="breeds" :colors="colors"/>
+            <create-dogs-form :breeds="breeds" :colors="colors" @cancel="toggleCreateForm"/>
         </div>
-        <!-- <div class="mt-4">
-            <TailwindPagination
-                :data="paginationInfo"
-                @pagination-change-page="fetchDogs"
-            />
-        </div> -->
     </div>
 </template>
   

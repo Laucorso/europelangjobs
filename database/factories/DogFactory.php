@@ -22,10 +22,10 @@ class DogFactory extends Factory
         ]);
         return [
             'breed_id'=>$br->id,
-            'size'=>'Mediano/Grande',
-            'origin'=>'England',
+            'size'=>$this->faker->randomElement(['Pequeño','Grande','Mediano/Grande']),
+            'origin'=>$this->faker->randomElement(['Belgium','Spain','Scottland','England']),
             'photo'=>'',
-            'hair_color'=>'Brown'
+            'hair_color'=>$this->faker->randomElement(['Black','Brown','White','Gray']),
         ];
     }
 }
