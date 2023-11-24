@@ -7,12 +7,12 @@ use App\Models\Dog;
 use App\Models\Breed;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DogController extends Controller
 {
     //
     public function index(Request $request){
-        Log::info($request);
         $breeds = Breed::select('name','id')->get();
         if($request->breed == null){
             $dogs = Dog::paginate(2);
@@ -32,10 +32,12 @@ class DogController extends Controller
         }    
 
         $dog = new Dog;
-        $dog->name = $request->name;
-        $dog->breed = $request->breed;
+        $dog->breed_id = $request->breed;
         $dog->size = $request->size;
-        $path = $request->file('photo')->store('images/dog-'.$dog->id, 'storage');
+        $dog->hair_color= $request->color_hair;
+        $path = Storage::disk('public')->put('images/dogs', $request->file('photo'));
+
+        //$path = $request->file('photo')->store('images/dog-'.$dog->id, 'storage');
         //guardar en storage y guardar path
         $dog->photo = $path;
         $dog->save();
@@ -48,19 +50,21 @@ class DogController extends Controller
 
     public function validateDog(Request $request){
         return Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'breed' => 'required|string|max:255|min:3|',
+            'breed' => 'required|string',
             'size' => 'required|string',
-            'photo'=> 'required|image|mimes:jpeg,jpg,jpeg|max:2048',
+            'color_hair' => 'required', 
+            'photo' => 'required|image|mimes:jpeg,jpg,jpeg',
         ]);
     }
 
     public function getDetails(){
         $colors = Dog::distinct()->pluck('hair_color');
-
+        $breeds = Breed::select('name','id')->get();
         $sizes = Dog::distinct()->pluck('size');
+
         return response()->json([
             'colors'=>$colors,
+            'breeds'=>$breeds,
             'sizes'=>$sizes,
         ], 200);
     }

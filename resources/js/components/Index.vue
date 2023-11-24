@@ -1,7 +1,8 @@
 
 <template>
     <div class="flex justify-center items-center">
-        <div class="w-full p-4">
+        <div v-if="create == false" class="w-full p-4">
+             <!-- hACER COMPONENTE SHOWDOGS -->
             <p class="font-semibold text-xl mb-4">Consulta los perros :)</p>
 
             <div class="flex gap-4 items-center mb-4">
@@ -38,6 +39,9 @@
                     refresh
                     </span>
                 </button>
+
+                <button @click="toggleCreateForm" class="ml-auto bg-green-700 rounded p-2 text-white font-semibold">Nuevo +</button>
+
             </div>
 
             <table class="w-full text-black">
@@ -58,12 +62,20 @@
                     </tr>
                 </tbody>
             </table>
-
-            <div v-if="create">
-                <CreateDogsForm />
+            <div class="mt-4">
+                <ul class="flex justify-center gap-2">
+                    <li v-if="paginationInfo.prev_page_url">
+                        <button @click="fetchPrevPage" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300">Anterior</button>
+                    </li>
+                    <li v-if="paginationInfo.next_page_url">
+                        <button @click="fetchNextPage" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300">Siguiente</button>
+                    </li>
+                </ul>
             </div>
         </div>
-
+        <div v-if="create">
+            <create-dogs-form :breeds="breeds" :colors="colors"/>
+        </div>
         <!-- <div class="mt-4">
             <TailwindPagination
                 :data="paginationInfo"
@@ -71,20 +83,11 @@
             />
         </div> -->
     </div>
-    <div class="mt-4">
-        <ul class="flex justify-center gap-2">
-            <li v-if="paginationInfo.prev_page_url">
-                <button @click="fetchPrevPage" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300">Anterior</button>
-            </li>
-            <li v-if="paginationInfo.next_page_url">
-                <button @click="fetchNextPage" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300">Siguiente</button>
-            </li>
-        </ul>
-    </div>
 </template>
   
   <script>
   import axios from "axios";
+  import CreateDogsForm from "@/components/CreateDogsForm.vue";
 
   export default {
     data() {
@@ -100,6 +103,9 @@
         create: false,
         originalDogs: [],
       };
+    },
+    components: {
+        CreateDogsForm,
     },
     watch: {
         selected_breed() {
@@ -137,11 +143,6 @@
             const url = `/api/list?page=${page}`;
             axios.get(url)
                 .then(response => {
-                    // this.dogs = response.data.dogs.data
-                    // console.log(this.dogs)
-                    // this.paginationInfo = response.data.dogs;
-                    // this.breeds = response.data.breeds
-
                     this.originalDogs = response.data.dogs.data;
                     this.dogs = this.originalDogs.slice(); // Inicializar con la lista completa
                     this.paginationInfo = response.data.dogs;
@@ -187,8 +188,9 @@
                 this.fetchDogs(pageNumber);
             }
         },
-
-    
+        toggleCreateForm() {
+            this.create = !this.create;
+        },
     }
   }
   </script>

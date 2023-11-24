@@ -11,11 +11,9 @@ Alpine.start();
 
 import { createApp } from 'vue';
 
-import { TailwindPagination } from 'laravel-vue-pagination';
-
 // Registra el componente globalmente
 import Index from "./components/Index.vue"
-import CreateDogsForm from "./components/CreateDogsForm.vue"
+import CreateDogsForm from "./components/CreateDogsForm.vue"; // Ajusta la ruta según tu estructura de archivos
 
 const app = createApp({
     components:{
@@ -24,7 +22,7 @@ const app = createApp({
     },
 });
 
-app.component('TailwindPagination', TailwindPagination);
+//app.component('TailwindPagination', TailwindPagination);
 
 
 app.mount('#app');

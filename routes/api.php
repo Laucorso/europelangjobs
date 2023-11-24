@@ -20,5 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/list', [DogController::class, 'index'])->name('index');
-Route::post('/save', [DogController::class, 'save'])->middleware(['auth', 'verified'])->name('create.dogs');
+Route::post('/save', [DogController::class, 'save'])->name('create.dogs');
 Route::get('/dog-details', [DogController::class, 'getDetails'])->name('index');

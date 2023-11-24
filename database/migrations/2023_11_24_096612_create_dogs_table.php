@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('breed_id')->references('id')->on('breeds');
             $table->string('hair_color');
             $table->string('size');
-            $table->string('origin');
+            $table->string('origin')->nullable();
             $table->timestamps();
         });
     }

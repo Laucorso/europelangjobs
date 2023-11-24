@@ -11,7 +11,13 @@ export default defineConfig({
             ],
             refresh: true,
         }),
-        vue(),
+        vue({
+            template: {
+              compilerOptions: {
+                isCustomElement: (tag) => ['CreateDogsForm'].includes(tag),
+              }
+            }
+        })
     ],
     resolve:{
         alias:{
