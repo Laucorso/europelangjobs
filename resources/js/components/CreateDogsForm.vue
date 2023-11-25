@@ -23,19 +23,19 @@
         <label class="text-lg font-semibold">Tamaño del perro:</label>
         <div class="flex gap-2">
           <label class="flex items-center">
-            <input type="radio" v-model="dog.size" value="pequeño" class="mr-2">
+            <input type="radio" v-model="dog.size" value="Pequeño" class="mr-2">
             Pequeño
           </label>
           <label class="flex items-center">
-            <input type="radio" v-model="dog.size" value="mediano/pequeño" class="mr-2">
+            <input type="radio" v-model="dog.size" value="Mediano/Pequeño" class="mr-2">
             Mediano/Pequeño
           </label>
           <label class="flex items-center">
-            <input type="radio" v-model="dog.size" value="mediano/grande" class="mr-2">
+            <input type="radio" v-model="dog.size" value="Mediano/Grande" class="mr-2">
             Mediano/Grande
           </label>
           <label class="flex items-center">
-            <input type="radio" v-model="dog.size" value="grande" class="mr-2">
+            <input type="radio" v-model="dog.size" value="Grande" class="mr-2">
             Grande
           </label>
         </div>

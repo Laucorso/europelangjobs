@@ -68,4 +68,8 @@ class DogController extends Controller
             'sizes'=>$sizes,
         ], 200);
     }
+
+    public function viewTest(){
+        return view('testing');
+    }
 }
