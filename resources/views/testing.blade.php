@@ -215,19 +215,18 @@
                         </div>
                     </div>
             
-                    <!-- Columna 2 -->
                     <div class="w-full">
                         <div>
                             <h3 class="text-lg font-semibold mb-4">FOR JOB SEEKERS</h3>
                             <ul>
-                                <li class="py-2">Find a job</li>
-                                <li class="py-2">Create an account</li>
-                                <li class="py-2">Career advice</li>
+                                <li class="py-2 text-gray-400">Find a job</li>
+                                <li class="py-2 text-gray-400">Create an account</li>
+                                <li class="py-2 text-gray-400">Career advice</li>
                             </ul>
                         </div>
                         <div class="mt-2">
                             <h3 class="text-lg font-semibold mb-4">STAY CONNECTED</h3>
-                            <div class="flex flex-row gap-2 mr-4">
+                            <div class="flex flex-row gap-4 mr-8">
                                 <a>
                                     <img src="https://static-00.iconduck.com/assets.00/linkedin-icon-1024x1024-net2o24e.png" style="width:200px;">
                                 </a>
@@ -252,17 +251,17 @@
                         <div>
                             <h3 class="text-lg font-semibold mb-4">FOR EMPLOYERS</h3>
                             <ul>
-                                <li class="py-2">Post a job</li>
-                                <li class="py-2">Create an account</li>
-                                <li class="py-2">Hiring solutions</li>
+                                <li class="py-2 text-gray-400">Post a job</li>
+                                <li class="py-2 text-gray-400">Create an account</li>
+                                <li class="py-2 text-gray-400">Hiring solutions</li>
                             </ul>
                         </div>
                         <div class="mt-2">
                             <h3 class="text-lg font-semibold mb-4">DOWNLOAD THE APP</h3>
                             <ul>
-                                <li class="py-2">Post a job</li>
-                                <li class="py-2">Create an account</li>
-                                <li class="py-2">Hiring solutions</li>
+                                <li class="py-2 text-gray-400">Post a job</li>
+                                <li class="py-2 text-gray-400">Create an account</li>
+                                <li class="py-2 text-gray-400">Hiring solutions</li>
                             </ul>
                         </div>
 
@@ -270,15 +269,14 @@
                     <div class="w-full">
                         <h3 class="text-lg font-semibold mb-4">EUROPE LANGUAGE JOBS</h3>
                         <ul>
-                            <li class="py-2">About us</li>
-                            <li class="py-2">FAQ</li>
-                            <li class="py-2">Legal conditions</li>
-                            <li class="py-2">Cookies policy</li>
-                            <li class="py-2">Contact us</li>
+                            <li class="py-2 text-gray-400">About us</li>
+                            <li class="py-2 text-gray-400">FAQ</li>
+                            <li class="py-2 text-gray-400">Legal conditions</li>
+                            <li class="py-2 text-gray-400">Cookies policy</li>
+                            <li class="py-2 text-gray-400">Contact us</li>
                         </ul>
                     </div>
                 </div>
-            
             </footer>
             
         </div>
